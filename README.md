@@ -22,6 +22,10 @@ Remember to check that the device you are attaching to uses 3.3v logic.
 ## RS-232?
 Yes, you can use this to connect to standard RS232 serial port and use it remotely. But you will need to use MAX3232 to drive the connection. Do not try to connect the MCU to the RS232 directly.
 
+## Dependencies
+-ESPAsyncTCP
+-ESPAsyncWebServer
+
 ## Reading UART port from a Lichee PI 3A using a ESP-01
 ![connectingESP01](https://i.imgur.com/zBzLiJ5.jpeg)
 
