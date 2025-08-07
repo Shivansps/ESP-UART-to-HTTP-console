@@ -1,4 +1,4 @@
-const char* indexHtml = R"=====(
+const char* indexHtml PROGMEM = R"=====(
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,21 +31,30 @@ const char* indexHtml = R"=====(
   <script>
     const log = document.getElementById('log');
     const input = document.getElementById('input');
-    const ws = new WebSocket(`ws://${location.host}/ws`);
-    ws.onmessage = (event) => {
-      log.textContent += event.data;
-      log.scrollTop = log.scrollHeight;
-    };
+    let ws;
 
-    ws.onopen = (event) => {
-      log.textContent += ">= CONNECTED\n\r";
-      log.scrollTop = log.scrollHeight;
-    };
+    function connect() {
+      ws = new WebSocket(`ws://${location.host}/ws`);
+      ws.onmessage = (event) => {
+        log.textContent += event.data;
+        log.scrollTop = log.scrollHeight;
+      };
 
-    ws.onclose = (event) => {
-      log.textContent += ">= DISCONNECTED\n\r";
-      log.scrollTop = log.scrollHeight;
-    };
+      ws.onopen = (event) => {
+        log.textContent += ">= CONNECTED\n\r";
+        log.scrollTop = log.scrollHeight;
+      };
+
+      ws.onclose = (event) => {
+        log.textContent += ">= DISCONNECTED\n\r";
+        log.textContent += ">= RECONECTING\n\r";
+        log.scrollTop = log.scrollHeight;
+        setTimeout(function() {
+          connect();
+          getOldMsgs();
+        }, 1000);
+      };
+    }
 
     function send() {
       ws.send(input.value + "\r\n");
@@ -66,6 +75,7 @@ const char* indexHtml = R"=====(
     }
 
     window.onload = () => {
+      connect();
       fetch("/getBaud")
         .then(r => r.text())
         .then(baud => {
@@ -75,6 +85,10 @@ const char* indexHtml = R"=====(
           }
         });
 
+      getOldMsgs();
+    };
+
+    function getOldMsgs(){
       fetch("/getStored")
         .then(r => r.text())
         .then(data => {
@@ -84,7 +98,7 @@ const char* indexHtml = R"=====(
             log.scrollTop = log.scrollHeight;
           }
         });
-    };
+    }
   </script>
 </body>
 </html>
