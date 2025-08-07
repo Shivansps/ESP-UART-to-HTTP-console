@@ -15,7 +15,7 @@ Simply add your wifi SSID and password to the sketch and you are ready to go.
 - Saving UART data to ran if no clients are connected, and sending it once a client connects. (warning, ESP-01/ESP8266 have limited ram and they will likely crash and reset once its full)
 
 ## Potential Issues
-This was developed to be able to read SBC UART port for debugging without having to attach a USB UART every time i wanted to do so or i would not have SSH access, and ESP-01 modules are excellent for this. While this can be effectively used as a remote UART console, it was never intended to be used for extended periods of time. There is no security, eveyone that can see the MCU IP can access to the console, and the websocket implementation is not exactly robust. There is no ping/pong or auto-reconnects if the connection is dropped. But it will warn you about it.
+This was developed to be able to read SBC UART port for debugging without having to attach a USB UART every time i wanted to do so or i would not have SSH access, and ESP-01 modules are excellent for this. While this can be effectively used as a remote UART console, it was never intended to be used for extended periods of time. There is no security, eveyone that can see the MCU IP can access to the console, and the websocket implementation is not exactly robust, there is no ping/pongs and only basic re-connect logic.
 
 Remember to check that the device you are attaching to uses 3.3v logic.
 
